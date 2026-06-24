@@ -3,214 +3,76 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TÈO BANKER - PRO SYSTEM</title>
+    <title>TÈO BANKER - ELITE SYSTEM</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&display=swap" rel="stylesheet">
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
-        /* Cấu hình cơ bản */
-        body {
-            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-            margin: 0;
-            padding: 25px 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            color: #ffffff;
-            min-height: 100vh;
-            position: relative; /* Để lớp nền mờ neo vào đây */
-            z-index: 1; /* Giữ nội dung nổi lên trên */
-        }
-
-        /* Lớp phủ Ảnh nền mờ (Đã tích hợp ảnh bg.jpg của bạn) */
-        body::before {
-            content: "";
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-image: url('bg.jpg'); /* Gọi đúng tên ảnh bạn vừa tải lên */
-            background-size: cover;
-            background-position: center;
-            filter: blur(8px) brightness(0.4); /* Làm mờ 8px và tối đi để nổi bật nút bấm */
-            z-index: -1; /* Đẩy lớp ảnh này xuống dưới cùng */
-        }
-
-        /* Tiêu đề & Avatar phát sáng */
-        .header {
-            text-align: center;
-            margin-bottom: 35px;
-            animation: fadeInDown 0.8s ease-out;
-        }
-        .header img {
-            width: 85px;
-            height: 85px;
-            border-radius: 50%;
-            margin-bottom: 15px;
-            border: 2px solid #3b82f6;
-            box-shadow: 0 0 20px rgba(59, 130, 246, 0.5);
-            padding: 3px;
-            background: #0b0f19;
-        }
-        .header h1 {
-            margin: 0;
-            font-size: 26px;
-            font-weight: 800;
-            letter-spacing: 1px;
-            background: linear-gradient(to right, #60a5fa, #a78bfa);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            text-transform: uppercase;
-        }
-        .header p {
-            margin: 8px 0 0;
-            color: #cbd5e1;
-            font-size: 14px;
-            letter-spacing: 0.5px;
-        }
-
-        /* Khu vực Menu kính mờ (Glassmorphism) */
-        .menu-container {
-            width: 100%;
-            max-width: 400px;
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-        }
-
-        .menu-item {
-            background: rgba(30, 41, 59, 0.65); /* Nền nút trong suốt hơn để lộ ảnh nền */
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.15); /* Viền sáng nhẹ */
-            border-radius: 20px;
-            padding: 18px;
-            display: flex;
-            align-items: center;
-            text-decoration: none;
-            color: #f8fafc;
-            transition: all 0.3s ease;
-            opacity: 0;
-            animation: slideUp 0.6s forwards;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-        }
-
-        /* Hiệu ứng khi chạm */
-        .menu-item:active {
-            transform: scale(0.96);
-            border-color: rgba(96, 165, 250, 0.6);
-            box-shadow: 0 0 20px rgba(96, 165, 250, 0.4);
-        }
-
-        /* Độ trễ xuất hiện */
-        .menu-item:nth-child(1) { animation-delay: 0.1s; }
-        .menu-item:nth-child(2) { animation-delay: 0.2s; }
-        .menu-item:nth-child(3) { animation-delay: 0.3s; }
-        .menu-item:nth-child(4) { animation-delay: 0.4s; }
-
-        /* Icon Gradient rực rỡ */
-        .icon {
-            font-size: 24px;
-            margin-right: 18px;
-            width: 52px;
-            height: 52px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 14px;
-            background: linear-gradient(135deg, rgba(255,255,255,0.15), rgba(255,255,255,0));
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-        
-        /* Cấu hình màu icon riêng biệt */
-        .icon-blue { text-shadow: 0 0 15px rgba(56, 189, 248, 0.9); }
-        .icon-green { text-shadow: 0 0 15px rgba(52, 211, 153, 0.9); }
-        .icon-purple { text-shadow: 0 0 15px rgba(192, 132, 252, 0.9); }
-        .icon-orange { text-shadow: 0 0 15px rgba(251, 146, 60, 0.9); }
-
-        .item-text { flex-grow: 1; }
-        .item-title {
-            font-weight: 700;
-            font-size: 16px;
-            margin: 0 0 5px 0;
-            color: #ffffff;
-        }
-        .item-desc {
-            font-size: 13px;
-            color: #cbd5e1;
-            margin: 0;
-            line-height: 1.4;
-        }
-        .arrow {
-            color: #94a3b8;
-            font-size: 22px;
-            transition: color 0.3s;
-        }
-        .menu-item:active .arrow { color: #60a5fa; }
-
-        .footer {
-            margin-top: auto;
-            padding-top: 40px;
-            font-size: 12px;
-            color: #94a3b8;
-            text-align: center;
-            animation: fadeIn 1.5s ease-out;
-        }
-
-        /* Hoạt ảnh */
-        @keyframes slideUp {
-            from { opacity: 0; transform: translateY(30px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        @keyframes fadeInDown {
-            from { opacity: 0; transform: translateY(-20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
+        /* CSS Giao diện giữ nguyên bản Elite siêu đẹp */
+        :root { --primary: #00f2fe; --secondary: #4facfe; }
+        body { font-family: 'Montserrat', sans-serif; margin: 0; padding: 30px 20px; display: flex; flex-direction: column; align-items: center; color: #ffffff; min-height: 100vh; position: relative; z-index: 1; overflow-x: hidden; }
+        body::before { content: ""; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-image: url('bg.jpg'); background-size: cover; background-position: center; filter: blur(6px) brightness(0.65); z-index: -2; }
+        body::after { content: ""; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle at 50% 40%, rgba(0, 0, 0, 0) 0%, rgba(11, 15, 25, 0.85) 100%); z-index: -1; }
+        .header { text-align: center; margin-bottom: 45px; animation: fadeInDown 1s ease-out; }
+        .avatar-container { position: relative; display: inline-block; margin-bottom: 15px; cursor: pointer; }
+        .avatar-container::before { content: ''; position: absolute; top: -4px; left: -4px; right: -4px; bottom: -4px; background: linear-gradient(45deg, #3b82f6, #8b5cf6, #3b82f6); border-radius: 50%; z-index: -1; filter: blur(12px); animation: pulseGlow 3s infinite alternate; }
+        .header img { width: 85px; height: 85px; border-radius: 50%; border: 2px solid rgba(255, 255, 255, 0.9); background: #0b0f19; object-fit: cover; box-shadow: 0 0 20px rgba(0,0,0,0.5); }
+        .header h1 { margin: 0; font-size: 26px; font-weight: 800; letter-spacing: 2px; background: linear-gradient(to right, #ffffff, #93c5fd); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-transform: uppercase; text-shadow: 0 0 30px rgba(147, 197, 253, 0.4); }
+        .header p { margin: 8px 0 0; color: #94a3b8; font-size: 12px; letter-spacing: 1.5px; text-transform: uppercase; font-weight: 600; }
+        .menu-container { width: 100%; max-width: 400px; display: flex; flex-direction: column; gap: 18px; }
+        .menu-item { background: linear-gradient(135deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.02) 100%); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border-top: 1px solid rgba(255, 255, 255, 0.3); border-left: 1px solid rgba(255, 255, 255, 0.2); border-right: 1px solid rgba(255, 255, 255, 0.05); border-bottom: 1px solid rgba(255, 255, 255, 0.05); border-radius: 22px; padding: 18px 20px; display: flex; align-items: center; text-decoration: none; color: #fff; transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); opacity: 0; animation: slideUp 0.7s forwards; box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1); cursor: pointer; }
+        .menu-item:active { transform: scale(0.96) translateY(2px); background: linear-gradient(135deg, rgba(255,255,255,0.12) 0%, rgba(255,255,255,0.04) 100%); box-shadow: 0 5px 15px rgba(59, 130, 246, 0.3); border-top-color: rgba(96, 165, 250, 0.8); }
+        .menu-item:nth-child(1) { animation-delay: 0.1s; } .menu-item:nth-child(2) { animation-delay: 0.2s; } .menu-item:nth-child(3) { animation-delay: 0.3s; } .menu-item:nth-child(4) { animation-delay: 0.4s; }
+        .icon { font-size: 24px; margin-right: 20px; width: 52px; height: 52px; display: flex; align-items: center; justify-content: center; border-radius: 16px; background: rgba(0, 0, 0, 0.4); border: 1px solid rgba(255, 255, 255, 0.1); position: relative; }
+        .icon-blue { box-shadow: 0 0 15px rgba(56, 189, 248, 0.3), inset 0 2px 5px rgba(255,255,255,0.15); } .icon-green { box-shadow: 0 0 15px rgba(52, 211, 153, 0.3), inset 0 2px 5px rgba(255,255,255,0.15); } .icon-purple { box-shadow: 0 0 15px rgba(192, 132, 252, 0.3), inset 0 2px 5px rgba(255,255,255,0.15); } .icon-orange { box-shadow: 0 0 15px rgba(251, 146, 60, 0.3), inset 0 2px 5px rgba(255,255,255,0.15); }
+        .item-text { flex-grow: 1; } .item-title { font-weight: 600; font-size: 16px; margin: 0 0 4px 0; color: #f8fafc; letter-spacing: 0.3px; } .item-desc { font-size: 13px; color: #94a3b8; margin: 0; line-height: 1.4; font-weight: 400; }
+        .arrow { color: #60a5fa; font-size: 22px; font-weight: 800; transition: transform 0.3s; } .menu-item:active .arrow { transform: translateX(4px); color: #93c5fd; }
+        .footer { margin-top: auto; padding-top: 40px; font-size: 11px; color: #475569; text-align: center; animation: fadeIn 2s ease-out; letter-spacing: 1px; text-transform: uppercase; }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(35px); } to { opacity: 1; transform: translateY(0); } } @keyframes fadeInDown { from { opacity: 0; transform: translateY(-25px); } to { opacity: 1; transform: translateY(0); } } @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } } @keyframes pulseGlow { from { opacity: 0.6; transform: scale(0.98); } to { opacity: 1; transform: scale(1.08); } }
     </style>
 </head>
 <body>
 
     <div class="header">
-        <img src="https://ui-avatars.com/api/?name=Teo+Banker&background=0b0f19&color=3b82f6&size=128&bold=true" alt="Logo">
+        <div class="avatar-container">
+            <img src="https://ui-avatars.com/api/?name=Teo+Banker&background=0b0f19&color=3b82f6&size=128&bold=true" alt="Logo">
+        </div>
         <h1>TÈO BANKER</h1>
-        <p>Trung Tâm Hệ Thống Tự Động</p>
+        <p>Hệ Thống Dịch Vụ Tự Động</p>
     </div>
 
     <div class="menu-container">
-        <a href="#" class="menu-item">
+        <div onclick="sendDataToBot('MOPONG')" class="menu-item">
             <div class="icon icon-blue">🪪</div>
             <div class="item-text">
                 <h2 class="item-title">Mô Phỏng Định Danh</h2>
                 <p class="item-desc">Hệ thống tạo video lật thẻ</p>
             </div>
             <div class="arrow">›</div>
-        </a>
+        </div>
 
-        <a href="#" class="menu-item">
+        <div onclick="sendDataToBot('BANK')" class="menu-item">
             <div class="icon icon-green">🏦</div>
             <div class="item-text">
                 <h2 class="item-title">Bank Theo Tên</h2>
                 <p class="item-desc">Hỗ trợ giao dịch MSB & BIDV</p>
             </div>
             <div class="arrow">›</div>
-        </a>
+        </div>
 
-        <a href="#" class="menu-item">
+        <div onclick="sendDataToBot('VCAM')" class="menu-item">
             <div class="icon icon-purple">📱</div>
             <div class="item-text">
                 <h2 class="item-title">Cài Đặt Vcam</h2>
                 <p class="item-desc">Tích hợp iOS & Android</p>
             </div>
             <div class="arrow">›</div>
-        </a>
+        </div>
 
         <a href="https://t.me/teobanker" class="menu-item">
             <div class="icon icon-orange">👨‍💻</div>
             <div class="item-text">
-                <h2 class="item-title">Liên Hệ Trực Tiếp</h2>
-                <p class="item-desc">Cổng hỗ trợ Admin 24/7</p>
+                <h2 class="item-title">Liên Hệ Admin</h2>
+                <p class="item-desc">Cổng hỗ trợ trực tiếp 24/7</p>
             </div>
             <div class="arrow">›</div>
         </a>
@@ -220,5 +82,16 @@
         <p>Vận hành & Bảo mật bởi TeoBanker © 2026</p>
     </div>
 
+    <script>
+        // Khởi tạo ứng dụng Web Telegram
+        let tg = window.Telegram.WebApp;
+        tg.expand(); // Tự động kéo Full màn hình khi mở
+        
+        // Hàm gửi dữ liệu từ Web về Bot
+        function sendDataToBot(command) {
+            tg.sendData(command); // Gửi mã lệnh tương ứng
+            tg.close(); // Gửi xong thì tự động đóng khung Web lại cho gọn
+        }
+    </script>
 </body>
 </html>
